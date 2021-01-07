@@ -1,4 +1,5 @@
 package com.ivo.javatraing.model;
+import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDate;
 
@@ -16,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ivo.javatraing.util.Utill;
 
 @Entity
-public class Product {
+public class Product implements Serializable {
 	@Id
 	int id;
 	
