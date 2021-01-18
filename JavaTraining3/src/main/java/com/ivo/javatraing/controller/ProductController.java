@@ -97,10 +97,7 @@ public class ProductController {
 				myQuery += " " + allParams.get(key);
 			}
 
-//				products = repository.findMyFiltersAll(myQuery);
-
 				break;
-//        		default:  products = repository.findAll();
 			}
 
 			if (flagPagination == 2) {
@@ -123,7 +120,7 @@ public class ProductController {
 		return ResponseEntity.status(HttpStatus.OK).body(products);
 	}
 
-	// Create product
+	// Create product using rabbit
 	@PostMapping("/addProduct")
 	public ResponseEntity<?> newProduct(@RequestBody Product newProduct) throws URISyntaxException {
 
@@ -135,7 +132,6 @@ public class ProductController {
 			;
 			ch.queueDeclare("Hello rooter1", false, false, false, null);
 			String message = "Hello man!";
-//    		 ch.basicPublish("", "Hello rooter", false, null,message.getBytes("UTF-8"));
 			template.convertAndSend("", "Hello rooter1", newProduct);
 			System.out.println("Message was sent to rabbit!!" + LocalDateTime.now());
 		} catch (IOException e) {
@@ -151,7 +147,7 @@ public class ProductController {
 
 	}
 
-	// Create product
+	// Create product with consume handly
 	@PostMapping("/consume")
 	public void consumeRabbitMessage() {
 
@@ -160,7 +156,6 @@ public class ProductController {
 			Connection conn = cf.newConnection();
 
 			Channel ch = conn.createChannel();
-			;
 			ch.queueDeclare("Hello rooter1", false, false, true, null);
 
 			ch.basicConsume("Hello rooter1", true, (consumerTag, message) -> {
@@ -189,28 +184,12 @@ public class ProductController {
 
 	}
 
-	// Create product
+	// Create order
 	@PostMapping("/send_to_order_service/{price}")
 	public Order1 sentToOrderService(@PathVariable String price, @RequestBody Order1 newOrder) {
 		String strURL = "http://ORDER-SERVICE/order-provider/pay/" + price;
-//       repositoryOR.save(newOrder);
-//       try {
-//	  		 ConnectionFactory cf = new ConnectionFactory();
-//	  		 Connection conn = cf.newConnection();
-//	  		 Channel ch = conn.createChannel();;
-//	  		 ch.queueDeclare("Order",false,false,false,null);
-//	  		 template.convertAndSend("","Order",newOrder);
-//	  		 System.out.println("Message was sent to rabbit!!"+ LocalDateTime.now());
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (TimeoutException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-		return tmpl.postForObject(strURL, newOrder, Order1.class);
-//       return newOrder;
 
+		return tmpl.postForObject(strURL, newOrder, Order1.class);
 	}
 
 	@DeleteMapping("/delProduct/{id}")
