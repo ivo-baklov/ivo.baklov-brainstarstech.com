@@ -1,4 +1,5 @@
 package com.ivo.javatraing.model;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -12,19 +13,20 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-public class Product implements Serializable {
+public class Order1 implements Serializable {
 	@Id
 	int id;
 	
-	@NotNull(message = "Product can not be null.")
-    @NotEmpty(message = "Product can not be empty.")
-	String name;
+	@Column(name ="product_id")
+	@JsonProperty("productId")
+	@NotNull(message = "Product ID can not be null.")
+    @NotEmpty(message = "Product ID can not be empty.")
+	String productId;
 	
+	@JsonProperty("product")
 	@NotNull(message = "Product must be relate to category.")
     @NotEmpty(message = "Product category can not be empty.")
-	String category;
-	
-	String description;
+	String product;
 	
 	public int getId() {
 		return id;
@@ -34,30 +36,7 @@ public class Product implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
+	
 	public int getQuantity() {
 		return quantity;
 	}

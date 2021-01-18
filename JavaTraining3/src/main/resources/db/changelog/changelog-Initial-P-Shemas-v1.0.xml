@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>   
+<databaseChangeLog  
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"  
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">  
+  
+  <changeSet id='001' author='ivo'>
+	  <sql>
+	   CREATE TABLE public.product
+		(
+		    id integer NOT NULL,
+		    category character varying(255) COLLATE pg_catalog."default",
+		    created_date date,
+		    description character varying(255) COLLATE pg_catalog."default",
+		    last_modified_date date,
+		    name character varying(255) COLLATE pg_catalog."default",
+		    quantity integer NOT NULL,
+		    CONSTRAINT product_pkey PRIMARY KEY (id)
+		)
+		
+		TABLESPACE pg_default;
+		
+		ALTER TABLE public.product
+    OWNER to postgres;
+	  </sql>
+  </changeSet>
+  
+</databaseChangeLog>

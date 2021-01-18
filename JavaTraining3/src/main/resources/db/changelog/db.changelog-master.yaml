@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changelog-Initial-P-Shemas-v1.0.xml
+  - include:
+      file: db/changelog/changelog-P-v1.0.xml
+  - include:
+      file: db/changelog/changelog-Initial-Shemas-v1.0.xml
+  - include:
+      file: db/changelog/changelog-v1.0.xml

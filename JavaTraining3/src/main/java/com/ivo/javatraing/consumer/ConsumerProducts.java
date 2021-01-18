@@ -2,6 +2,7 @@ package com.ivo.javatraing.consumer;
 
 import java.time.LocalDateTime;
 
+import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,14 +11,16 @@ import com.ivo.javatraing.model.Product;
 import com.ivo.javatraing.repo.ProductRepository;
 
 @Component
+@RabbitListener(queues="Hello rooter1" )
 public class ConsumerProducts {
 	@Autowired
 	ProductRepository repository;
 
-	@RabbitListener(queues="Hello rooter")
+	
+	@RabbitHandler
 	public void consumeMessageFromQueue(Product prod) {
 		try {
-			Thread.sleep(10000);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

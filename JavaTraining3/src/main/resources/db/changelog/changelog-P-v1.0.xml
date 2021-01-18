@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>   
+<databaseChangeLog  
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"  
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">  
+  
+  <changeSet id='003' author='ivo'>
+	  <sql>
+	   	INSERT INTO public.product( id,  name, category, description,  quantity, created_date, last_modified_date) VALUES(1001,'Dell 5401','laptop', 'Dell description', 12, '20-05-2020','06-05-2020');
+		INSERT INTO public.product( id,  name, category, description,  quantity, created_date, last_modified_date) VALUES(1002, 'Dell U201','laptop', 'Dell description',  5, '20-05-2020','06-05-2020');
+		INSERT INTO public.product( id,  name, category, description,  quantity, created_date, last_modified_date) VALUES(1003, 'Samsung',  'laptop', 'Dell description', 15, '20-05-2020','06-05-2020');
+		  </sql>
+  </changeSet>
+  
+</databaseChangeLog>

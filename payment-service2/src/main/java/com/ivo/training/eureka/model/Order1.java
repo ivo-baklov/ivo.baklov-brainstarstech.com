@@ -1,4 +1,5 @@
-package com.ivo.javatraing.model;
+package com.ivo.training.eureka.model;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -12,50 +13,27 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-public class Product implements Serializable {
+public class Order1 implements Serializable {
 	@Id
 	int id;
-	
-	@NotNull(message = "Product can not be null.")
-    @NotEmpty(message = "Product can not be empty.")
-	String name;
-	
+
+	@Column(name = "product_id")
+	@JsonProperty("productId")
+	@NotNull(message = "Product ID can not be null.")
+	@NotEmpty(message = "Product ID can not be empty.")
+	String productId;
+
+	@JsonProperty("product")
 	@NotNull(message = "Product must be relate to category.")
-    @NotEmpty(message = "Product category can not be empty.")
-	String category;
-	
-	String description;
-	
+	@NotEmpty(message = "Product category can not be empty.")
+	String product;
+
 	public int getId() {
 		return id;
 	}
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public int getQuantity() {
@@ -71,21 +49,20 @@ public class Product implements Serializable {
 	}
 
 	public void setCreatedDate(LocalDate createdDate) {
-		this.createdDate = createdDate;;
+		this.createdDate = createdDate;
+		;
 	}
 
 	int quantity;
-	
 
-	@Column(name ="created_date")
+	@Column(name = "created_date")
 	@JsonProperty("createdDate")
-	@JsonFormat(pattern="dd-MM-yyyy")
+	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate createdDate;
-	
 
-	@Column(name ="last_modified_date")
+	@Column(name = "last_modified_date")
 	@JsonProperty("lastModifiedDate")
-	@JsonFormat(pattern="dd-MM-yyyy")
+	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate lastModifiedDate;
 
 	public LocalDate getLastModifiedDate() {
@@ -95,6 +72,5 @@ public class Product implements Serializable {
 	public void setLastModifiedDate(LocalDate lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
 	}
-
 
 }
