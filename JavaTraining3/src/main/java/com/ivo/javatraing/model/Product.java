@@ -1,4 +1,5 @@
 package com.ivo.javatraing.model;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -15,17 +16,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Product implements Serializable {
 	@Id
 	int id;
-	
+
 	@NotNull(message = "Product can not be null.")
-    @NotEmpty(message = "Product can not be empty.")
+	@NotEmpty(message = "Product can not be empty.")
 	String name;
-	
+
 	@NotNull(message = "Product must be relate to category.")
-    @NotEmpty(message = "Product category can not be empty.")
+	@NotEmpty(message = "Product category can not be empty.")
 	String category;
-	
+
 	String description;
-	
+
 	public int getId() {
 		return id;
 	}
@@ -71,21 +72,20 @@ public class Product implements Serializable {
 	}
 
 	public void setCreatedDate(LocalDate createdDate) {
-		this.createdDate = createdDate;;
+		this.createdDate = createdDate;
+		;
 	}
 
 	int quantity;
-	
 
-	@Column(name ="created_date")
+	@Column(name = "created_date")
 	@JsonProperty("createdDate")
-	@JsonFormat(pattern="dd-MM-yyyy")
+	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate createdDate;
-	
 
-	@Column(name ="last_modified_date")
+	@Column(name = "last_modified_date")
 	@JsonProperty("lastModifiedDate")
-	@JsonFormat(pattern="dd-MM-yyyy")
+	@JsonFormat(pattern = "dd-MM-yyyy")
 	private LocalDate lastModifiedDate;
 
 	public LocalDate getLastModifiedDate() {
@@ -95,6 +95,5 @@ public class Product implements Serializable {
 	public void setLastModifiedDate(LocalDate lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
 	}
-
 
 }

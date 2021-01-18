@@ -14,6 +14,7 @@ public class JavaTraining2Application {
 	public RestTemplate getTemplate() {
 		return new RestTemplate();
 	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(JavaTraining2Application.class, args);
 	}

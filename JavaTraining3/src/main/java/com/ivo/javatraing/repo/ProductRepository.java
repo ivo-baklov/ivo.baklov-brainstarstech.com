@@ -11,13 +11,12 @@ import org.springframework.data.domain.Pageable;
 import com.ivo.javatraing.model.Product;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Integer>   {
+public interface ProductRepository extends JpaRepository<Product, Integer> {
 
-	
-	@Query(nativeQuery = true, value="select * from product ?0 ")
-	
+	@Query(nativeQuery = true, value = "select * from product ?0 ")
+
 	List<Product> findMyFiltersAll(String myQuery);
-	
-	 Page<Product> findAll( Pageable pageable);
-	
+
+	Page<Product> findAll(Pageable pageable);
+
 }

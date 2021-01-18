@@ -42,104 +42,102 @@ import com.rabbitmq.client.Delivery;
 @RestController
 public class ProductController {
 
-	final String NAME_SORT="orderBy";
-	final String TYPE_DESC="direction";
-	final String NAME_PAGE="page";
-	final String NAME_PSIZE="pageSize";
+	final String NAME_SORT = "orderBy";
+	final String TYPE_DESC = "direction";
+	final String NAME_PAGE = "page";
+	final String NAME_PSIZE = "pageSize";
 	@Autowired
 	ProductRepository repository;
-	
+
 	@Autowired
 	OrderRepository repositoryOR;
-	
+
 	@Autowired
 	RabbitTemplate template;
-	
+
 	@Autowired
 	RabbitTemplate templateConsume;
-	
+
 	@Autowired
-    private RestTemplate tmpl;
-	
-	//Get all products
-    @GetMapping("/products")
-    public ResponseEntity<List<Product>>  all(@RequestParam Map<String,String> allParams) {
-        System.out.println("Parameters are " + allParams.entrySet());
-        
-        List<Product> products=null;
-        int page=0;
-        int size =3;
-        String nameSort=null;
-        String asc_desc=null;
-        int flagPagination=0;
-        String myQuery=" ";
-        for (String key : allParams.keySet()) {
-        	
-        	switch (key) {
-        		case NAME_PAGE:{
-        			myQuery+=" Limit "+allParams.get(key);
-        			page= Integer.parseInt(allParams.get(key));
-        			flagPagination++;
-        		}
-        		break;
-        		case NAME_PSIZE:{
-        			myQuery+=" OFFSET "+allParams.get(key);
-        			size= Integer.parseInt(allParams.get(key));
-        			flagPagination++;
-        		}
-        		break;
-        		case NAME_SORT:{
-        			myQuery+=" ORDER BY "+allParams.get(key); 
-        			nameSort = allParams.get(key);
-        		}
-        		break;
-        		case TYPE_DESC:{
-        			myQuery+=" "+allParams.get(key);
-        		}
-        		
+	private RestTemplate tmpl;
+
+	// Get all products
+	@GetMapping("/products")
+	public ResponseEntity<List<Product>> all(@RequestParam Map<String, String> allParams) {
+		System.out.println("Parameters are " + allParams.entrySet());
+
+		List<Product> products = null;
+		int page = 0;
+		int size = 3;
+		String nameSort = null;
+		String asc_desc = null;
+		int flagPagination = 0;
+		String myQuery = " ";
+		for (String key : allParams.keySet()) {
+
+			switch (key) {
+			case NAME_PAGE: {
+				myQuery += " Limit " + allParams.get(key);
+				page = Integer.parseInt(allParams.get(key));
+				flagPagination++;
+			}
+				break;
+			case NAME_PSIZE: {
+				myQuery += " OFFSET " + allParams.get(key);
+				size = Integer.parseInt(allParams.get(key));
+				flagPagination++;
+			}
+				break;
+			case NAME_SORT: {
+				myQuery += " ORDER BY " + allParams.get(key);
+				nameSort = allParams.get(key);
+			}
+				break;
+			case TYPE_DESC: {
+				myQuery += " " + allParams.get(key);
+			}
+
 //				products = repository.findMyFiltersAll(myQuery);
-        		
-       		break;
+
+				break;
 //        		default:  products = repository.findAll();
-        	}
-        	
-        	if (flagPagination==2) {
-        		Pageable paging = PageRequest.of(page, size);
-        		if (nameSort != null) {
-        			if (asc_desc==null) {
-        				paging = PageRequest.of(page, size, Sort.by(nameSort).ascending());
-        			}
-        			else {
-        				paging = PageRequest.of(page, size, Sort.by(nameSort).descending());
-        			}
-        			
-        		}
-        		Page<Product> productsPage = repository.findAll(paging);
-        		products= productsPage.getContent();
-        		
-        	}
-			
+			}
+
+			if (flagPagination == 2) {
+				Pageable paging = PageRequest.of(page, size);
+				if (nameSort != null) {
+					if (asc_desc == null) {
+						paging = PageRequest.of(page, size, Sort.by(nameSort).ascending());
+					} else {
+						paging = PageRequest.of(page, size, Sort.by(nameSort).descending());
+					}
+
+				}
+				Page<Product> productsPage = repository.findAll(paging);
+				products = productsPage.getContent();
+
+			}
+
 		}
 
-        
-        
-        return ResponseEntity.status(HttpStatus.OK).body(products);
-    }
-    
-  //Create product
-    @PostMapping("/addProduct")
-    public ResponseEntity<?> newProduct(@RequestBody Product newProduct) throws URISyntaxException {
-    
-    	 try {
-    		 ConnectionFactory cf = new ConnectionFactory();
-    		 Connection conn = cf.newConnection();
+		return ResponseEntity.status(HttpStatus.OK).body(products);
+	}
 
-    		 Channel ch = conn.createChannel();;
-    		 ch.queueDeclare("Hello rooter1",false,false,false,null);
-    		 String message = "Hello man!";
+	// Create product
+	@PostMapping("/addProduct")
+	public ResponseEntity<?> newProduct(@RequestBody Product newProduct) throws URISyntaxException {
+
+		try {
+			ConnectionFactory cf = new ConnectionFactory();
+			Connection conn = cf.newConnection();
+
+			Channel ch = conn.createChannel();
+			;
+			ch.queueDeclare("Hello rooter1", false, false, false, null);
+			String message = "Hello man!";
 //    		 ch.basicPublish("", "Hello rooter", false, null,message.getBytes("UTF-8"));
-    		 template.convertAndSend("","Hello rooter1",newProduct);
-    		 System.out.println("Message was sent to rabbit!!"+ LocalDateTime.now());
+			template.convertAndSend("", "Hello rooter1", newProduct);
+			System.out.println("Message was sent to rabbit!!" + LocalDateTime.now());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -147,37 +145,37 @@ public class ProductController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
-    	
+
 //        repository.save(newProduct);
-        return ResponseEntity.status(HttpStatus.OK).body(newProduct);
+		return ResponseEntity.status(HttpStatus.OK).body(newProduct);
 
-    }
-    
-  //Create product
-    @PostMapping("/consume")
-    public void consumeRabbitMessage(){
-        
-    	 try {
-    		 ConnectionFactory cf = new ConnectionFactory();
-    		 Connection conn = cf.newConnection();
+	}
 
-    		 Channel ch = conn.createChannel();;
-    		 ch.queueDeclare("Hello rooter1",false,false,true,null);
-    		
-    		 ch.basicConsume("Hello rooter1", true, (consumerTag, message) -> {
-					// TODO Auto-generated method stub
-    			 String s =new String (message.getBody(),"UTF-8");
-    			 System.out.println("my message is"+s+". Receive in time:"+LocalDateTime.now());
-				}
-    			 
-    		 ,consumerTag -> {
-					// TODO Auto-generated method stub
-					
-				}
-    			 
-    		 );
-    		 System.out.println("Message was consumed of rabbit!!");
+	// Create product
+	@PostMapping("/consume")
+	public void consumeRabbitMessage() {
+
+		try {
+			ConnectionFactory cf = new ConnectionFactory();
+			Connection conn = cf.newConnection();
+
+			Channel ch = conn.createChannel();
+			;
+			ch.queueDeclare("Hello rooter1", false, false, true, null);
+
+			ch.basicConsume("Hello rooter1", true, (consumerTag, message) -> {
+				// TODO Auto-generated method stub
+				String s = new String(message.getBody(), "UTF-8");
+				System.out.println("my message is" + s + ". Receive in time:" + LocalDateTime.now());
+			}
+
+					, consumerTag -> {
+						// TODO Auto-generated method stub
+
+					}
+
+			);
+			System.out.println("Message was consumed of rabbit!!");
 //    		 repository.save(newProduct);
 //    	        return ResponseEntity.status(HttpStatus.OK).body(newProduct);
 
@@ -188,14 +186,13 @@ public class ProductController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
-    	
-    }
-    
-    //Create product
-    @PostMapping("/send_to_order_service/{price}")
-    public Order1 sentToOrderService(@PathVariable String price,@RequestBody Order1 newOrder){
-       String strURL="http://ORDER-SERVICE/order-provider/pay/"+price;
+
+	}
+
+	// Create product
+	@PostMapping("/send_to_order_service/{price}")
+	public Order1 sentToOrderService(@PathVariable String price, @RequestBody Order1 newOrder) {
+		String strURL = "http://ORDER-SERVICE/order-provider/pay/" + price;
 //       repositoryOR.save(newOrder);
 //       try {
 //	  		 ConnectionFactory cf = new ConnectionFactory();
@@ -211,42 +208,38 @@ public class ProductController {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
-    	 return tmpl.postForObject(strURL,newOrder, Order1.class);
+		return tmpl.postForObject(strURL, newOrder, Order1.class);
 //       return newOrder;
-    	
-    	
-    }
-        
-    @DeleteMapping("/delProduct/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable String id) {
-        repository.deleteById(Integer.parseInt(id));
 
-        return ResponseEntity.noContent().build();
-    }
-    
-  //Get one product
-    @GetMapping("/products/{id}")
-    public ResponseEntity<Product> one(@PathVariable String id) {
+	}
 
-        Product product = repository.findById(Integer.parseInt(id))
-                .orElseThrow(() -> new ProductNotFoundException(id));
-        return ResponseEntity.status(HttpStatus.OK).body(product);
-    }
-    
-  //Update product
-    @PutMapping("/updProduct")
-    public ResponseEntity<?> updateProduct(@RequestBody Product product) throws URISyntaxException {
-    	boolean flag=true;
-    	 Optional<Product> product1 = repository.findById(product.getId());
-    	 if (!product1.isEmpty()) {
-    		 repository.save(product);
-    	 		return ResponseEntity.status(HttpStatus.OK).body(product);
-    	 }
-    	 else {
-    		 	
-    	 		return ResponseEntity.notFound().build();
-    	 }
-        
+	@DeleteMapping("/delProduct/{id}")
+	public ResponseEntity<?> deleteProduct(@PathVariable String id) {
+		repository.deleteById(Integer.parseInt(id));
 
-    }
+		return ResponseEntity.noContent().build();
+	}
+
+	// Get one product
+	@GetMapping("/products/{id}")
+	public ResponseEntity<Product> one(@PathVariable String id) {
+
+		Product product = repository.findById(Integer.parseInt(id)).orElseThrow(() -> new ProductNotFoundException(id));
+		return ResponseEntity.status(HttpStatus.OK).body(product);
+	}
+
+	// Update product
+	@PutMapping("/updProduct")
+	public ResponseEntity<?> updateProduct(@RequestBody Product product) throws URISyntaxException {
+		boolean flag = true;
+		Optional<Product> product1 = repository.findById(product.getId());
+		if (!product1.isEmpty()) {
+			repository.save(product);
+			return ResponseEntity.status(HttpStatus.OK).body(product);
+		} else {
+
+			return ResponseEntity.notFound().build();
+		}
+
+	}
 }

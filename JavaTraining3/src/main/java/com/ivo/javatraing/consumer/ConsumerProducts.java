@@ -11,12 +11,11 @@ import com.ivo.javatraing.model.Product;
 import com.ivo.javatraing.repo.ProductRepository;
 
 @Component
-@RabbitListener(queues="Hello rooter1" )
+@RabbitListener(queues = "Hello rooter1")
 public class ConsumerProducts {
 	@Autowired
 	ProductRepository repository;
 
-	
 	@RabbitHandler
 	public void consumeMessageFromQueue(Product prod) {
 		try {
@@ -25,8 +24,9 @@ public class ConsumerProducts {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Message Receive form queue is:id:"+prod.getId()+",Name:"+prod.getName()+"->in time:"+LocalDateTime.now());
+		System.out.println("Message Receive form queue is:id:" + prod.getId() + ",Name:" + prod.getName() + "->in time:"
+				+ LocalDateTime.now());
 
-        repository.save(prod);
+		repository.save(prod);
 	}
 }
